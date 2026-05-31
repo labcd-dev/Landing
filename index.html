@@ -1,189 +1,1947 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LABCD</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="main.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Control Design Platform - Lab of Control Design </title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ["Inter", "Arial", "sans-serif"],
+                    },
+                    colors: {
+                        darkNav: "#030716",
+                        darkHero: "#07101f",
+                    },
+                    boxShadow: {
+                        glow: "0 0 30px rgba(34,211,238,0.18)",
+                        blueglow: "0 18px 45px rgba(37,99,235,0.35)",
+                    },
+                    backgroundImage: {
+                        heroGrid:
+                            "linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)",
+                    },
+                },
+            },
+        };
+    </script>
 </head>
-<body>
 
-<canvas id="particles"></canvas>
-<div id="cursor-glow"></div>
+<body class="bg-white font-inter text-white">
 
-<div class="fixed inset-0 -z-10">
-<div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-indigo-600/20 blur-[180px] rounded-full"></div>
-<div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-cyan-500/10 blur-[140px] rounded-full"></div>
+    <!-- Subtle Mouse Glow Effect -->
+<div id="mouse-glow"
+    class="pointer-events-none fixed left-0 top-0 z-[60] hidden h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/10 blur-3xl mix-blend-screen md:block">
 </div>
 
-<nav class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
-<div class="font-semibold text-xl">LABCD</div>
-<div class="hidden md:flex gap-10 text-sm text-zinc-400">
-<a href="about.html">About</a>
-<a href="privacy.html">Privacy</a>
-<a href="docs.html">Docs</a>
-</div>
-<button class="magnetic px-5 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10">
-Request Demo
-</button>
-</nav>
-
-<section class="max-w-7xl mx-auto px-6 pt-24 pb-32 reveal">
-<div class="max-w-4xl">
-<div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-zinc-400 mb-8">
-Autonomous Controller Design with AI
+<div id="mouse-dot"
+    class="pointer-events-none fixed left-0 top-0 z-[61] hidden h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-300/70 shadow-[0_0_18px_rgba(34,211,238,0.55)] md:block">
 </div>
 
-<h1 class="text-5xl md:text-7xl font-bold leading-tight tracking-tight">
-Design Optimal
-<span class="hero-gradient bg-gradient-to-r from-indigo-400 via-cyan-400 to-sky-400 bg-clip-text text-transparent">
-Control Systems
-</span>
-Using LLMs
-</h1>
+    <!-- Navbar -->
+    <header class="sticky top-0 z-50 relative w-full overflow-hidden border-b border-white/[0.07] bg-darkNav">
 
-<p class="mt-8 text-xl text-zinc-400 max-w-2xl leading-relaxed">
-An AI engineer specialized in controller synthesis, tuning, validation and optimization.
-</p>
+        <!-- Subtle Bottom Grid -->
+        <div
+            class="pointer-events-none absolute bottom-0 left-0 right-0 h-5 opacity-25 [background-image:linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:32px_32px]">
+        </div>
 
-<div class="mt-12 flex flex-wrap gap-4">
-<a href="https://chat.labcd.ai" class="magnetic px-8 py-4 rounded-2xl bg-white text-black font-medium">Start Building</a>
-<a href="https://chat.labcd.ai" class="magnetic px-8 py-4 rounded-2xl border border-white/10 bg-white/5">View Demo</a>
-</div>
-</div>
+        <nav
+            class="relative z-10 mx-auto flex min-h-[76px] max-w-[1280px] items-center justify-between px-6 max-lg:px-5 max-md:min-h-[66px]">
 
-<div class="dashboard-preview mt-24 rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-4">
-<div class="rounded-2xl border border-white/10 bg-black p-8">
-<div class="flex gap-2 mb-8">
-<div class="w-3 h-3 rounded-full bg-red-500"></div>
-<div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-<div class="w-3 h-3 rounded-full bg-green-500"></div>
-</div>
+            <!-- Logo -->
+            <a href="#" class="flex shrink-0 items-center gap-3 text-white no-underline" aria-label="Labcd Home">
 
-<div class="grid md:grid-cols-2 gap-8">
-<div class="rounded-2xl bg-zinc-900 p-6 border border-white/5">
-<p class="text-zinc-500 text-sm mb-3">Prompt</p>
-<p>Design a robust MPC controller for a nonlinear autonomous vehicle.</p>
-</div>
+                <span
+                    class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 shadow-[0_0_18px_rgba(23,215,255,0.18)] max-md:h-9 max-md:w-9">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        class="h-5 w-5 text-slate-950">
+                        <rect x="7" y="7" width="10" height="10" rx="2"></rect>
+                        <path d="M4 10V8a4 4 0 0 1 4-4h2"></path>
+                        <path d="M14 4h2a4 4 0 0 1 4 4v2"></path>
+                        <path d="M20 14v2a4 4 0 0 1-4 4h-2"></path>
+                        <path d="M10 20H8a4 4 0 0 1-4-4v-2"></path>
+                        <path d="M12 2v4"></path>
+                        <path d="M12 18v4"></path>
+                        <path d="M2 12h4"></path>
+                        <path d="M18 12h4"></path>
+                    </svg>
+                </span>
 
-<div class="rounded-2xl bg-gradient-to-br from-indigo-500/10 to-cyan-500/10 border border-cyan-500/20 p-6">
-<p class="text-cyan-300 text-sm mb-4">Generated Output</p>
-<ul class="space-y-2">
-<li>✓ MPC Architecture</li>
-<li>✓ Stability Analysis</li>
-<li>✓ State Observer Design</li>
-<li>✓ Auto-Tuned Parameters</li>
-<li>✓ Simulation Ready</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-</section>
+                <span class="text-[22px] font-extrabold tracking-[-0.6px] text-white max-md:text-xl">
+                    LabCD
+                </span>
+            </a>
 
-<section class="max-w-7xl mx-auto px-6 pb-32 reveal">
-<div class="text-center mb-20">
-<h2 class="text-4xl font-bold">Built for Control Engineers</h2>
-<p class="text-zinc-500 mt-4">From classical control to advanced optimization.</p>
-</div>
+            <!-- Desktop Menu -->
+            <ul class="mx-auto flex items-center gap-8 px-8 max-lg:gap-5 max-lg:px-5 max-md:hidden">
+                <li>
+                    <a href="#" class="text-[15px] font-medium text-white/60 transition hover:text-white">
+                        Product
+                    </a>
+                </li>
+                <li>
+                    <a href="#features" class="text-[15px] font-medium text-white/60 transition hover:text-white">
+                        Features
+                    </a>
+                </li>
+                <li>
+                    <a href="#workflow" class="text-[15px] font-medium text-white/60 transition hover:text-white">
+                        Workflow
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="text-[15px] font-medium text-white/60 transition hover:text-white">
+                        Pricing
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="text-[15px] font-medium text-white/60 transition hover:text-white">
+                        Docs
+                    </a>
+                </li>
+            </ul>
 
-<div class="grid md:grid-cols-3 gap-6">
-<div class="feature-card p-8 rounded-3xl border border-white/10 bg-white/[0.03]">
-<h3 class="text-xl font-semibold mb-4">Controller Synthesis</h3>
-<p class="text-zinc-500">Generate PID, LQR, MPC and custom architectures.</p>
-</div>
-<div class="feature-card p-8 rounded-3xl border border-white/10 bg-white/[0.03]">
-<h3 class="text-xl font-semibold mb-4">Automatic Tuning</h3>
-<p class="text-zinc-500">AI-driven parameter optimization.</p>
-</div>
-<div class="feature-card p-8 rounded-3xl border border-white/10 bg-white/[0.03]">
-<h3 class="text-xl font-semibold mb-4">Verification</h3>
-<p class="text-zinc-500">Analyze robustness before deployment.</p>
-</div>
-</div>
-</section>
+            <!-- Desktop Actions -->
+            <div class="flex shrink-0 items-center gap-5 max-md:hidden">
 
-<section class="max-w-5xl mx-auto px-6 pb-32 reveal">
-<div class="glow-border rounded-[40px] p-[1px]">
-<div class="rounded-[40px] p-16 text-center bg-gradient-to-b from-white/[0.05] to-white/[0.02]">
-<h2 class="text-5xl font-bold mb-6">Accelerate Control Design</h2>
-<p class="text-zinc-400 max-w-2xl mx-auto">
-Transform system requirements into validated controller architectures in minutes.
-</p>
-<a href="https://chat.labcd.ai" class="magnetic inline-block mt-10 px-8 py-4 rounded-2xl bg-white text-black font-medium">
-Get Early Access
-</a>
-</div>
-</div>
-</section>
+                <a href="https://chat.labcd.ai" class="text-[15px] font-medium text-white/65 transition hover:text-white">
+                    Sign In
+                </a>
+
+                <a href="https://chat.labcd.ai"
+                    class="inline-flex h-11 items-center justify-center whitespace-nowrap rounded-lg bg-gradient-to-r from-cyan-400 to-blue-600 px-5 text-[15px] font-bold text-slate-950 shadow-[0_10px_24px_rgba(38,103,255,0.18)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(38,103,255,0.28)]">
+                    Access Platform
+                </a>
+
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button type="button"
+                class="hidden h-10 w-10 rounded-lg border border-white/10 bg-white/[0.03] transition hover:bg-white/[0.06] max-md:flex max-md:flex-col max-md:items-center max-md:justify-center max-md:gap-1.5"
+                aria-label="Open Menu">
+                <span class="block h-0.5 w-5 rounded-full bg-white/80"></span>
+                <span class="block h-0.5 w-5 rounded-full bg-white/80"></span>
+                <span class="block h-0.5 w-5 rounded-full bg-white/80"></span>
+            </button>
+
+        </nav>
+    </header>
+
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-darkHero bg-heroGrid [background-size:36px_36px]">
+        <div
+            class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.10),transparent_30%),radial-gradient(circle_at_bottom,rgba(37,99,235,0.10),transparent_35%)]">
+        </div>
+
+        <div
+            class="relative z-10 mx-auto flex max-w-[1440px] flex-col items-center px-6 pb-20 pt-16 text-center sm:px-8 md:pt-20 lg:px-10">
+
+            <!-- Label -->
+            <div
+                class="mb-8 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-5 py-2 text-sm font-semibold text-cyan-200 shadow-glow">
+                <span>🚀</span>
+                <span>AI-Powered Control Design Platform</span>
+            </div>
+
+            <!-- Heading -->
+            <h1
+                class="max-w-5xl text-4xl font-extrabold leading-tight tracking-[-0.03em] text-white sm:text-5xl md:text-6xl lg:text-[72px]">
+                From Prompt to
+                <span class="text-cyan-400">Deployed</span><br />
+                <span class="text-blue-400">Control System</span>
+            </h1>
+
+            <!-- Description -->
+            <p class="mt-8 max-w-4xl text-lg leading-8 text-white/75 sm:text-xl md:text-[22px]">
+                Harness Agentic AI and control engineering to deliver an end-to-end solution:
+                synthesize, verify, improve, and deploy reliable modular control systems for
+                robotics, aerospace, embedded systems, and mechatronics—in hours, not weeks.
+            </p>
+
+            <!-- Buttons -->
+            <div class="mt-10 flex flex-col items-center gap-4 sm:flex-row">
+                <a href="https://chat.labcd.ai"
+                    class="inline-flex min-h-[56px] items-center justify-center rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 px-8 text-base font-bold text-slate-950 shadow-blueglow transition hover:-translate-y-0.5">
+                    Try Now
+                    <span class="ml-2 text-lg">→</span>
+                </a>
+
+                <a href="https://chat.labcd.ai"
+                    class="inline-flex min-h-[56px] items-center justify-center gap-2 rounded-xl border border-cyan-400/20 bg-white/5 px-8 text-base font-semibold text-cyan-200 backdrop-blur-sm transition hover:bg-white/10">
+                    <svg xmlns="https://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M14.752 11.168l-4.586-2.65A1 1 0 009 9.35v5.3a1 1 0 001.166.832l4.586-2.65a1 1 0 000-1.664z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" />
+                    </svg>
+                    Watch Demo
+                </a>
+            </div>
+
+            <!-- Visual Card -->
+            <div class="relative mt-16 w-full max-w-4xl">
+                <style>
+                    @keyframes cart-control {
+                        0% {
+                            transform: translateX(-42px);
+                        }
+
+                        12% {
+                            transform: translateX(28px);
+                        }
+
+                        25% {
+                            transform: translateX(48px);
+                        }
+
+                        38% {
+                            transform: translateX(10px);
+                        }
+
+                        50% {
+                            transform: translateX(-36px);
+                        }
+
+                        62% {
+                            transform: translateX(-52px);
+                        }
+
+                        75% {
+                            transform: translateX(-18px);
+                        }
+
+                        88% {
+                            transform: translateX(36px);
+                        }
+
+                        100% {
+                            transform: translateX(-42px);
+                        }
+                    }
+
+                    @keyframes pendulum-balance {
+                        0% {
+                            transform: rotate(-5.5deg);
+                        }
+
+                        10% {
+                            transform: rotate(3.5deg);
+                        }
+
+                        22% {
+                            transform: rotate(6.5deg);
+                        }
+
+                        34% {
+                            transform: rotate(-2deg);
+                        }
+
+                        46% {
+                            transform: rotate(-6deg);
+                        }
+
+                        58% {
+                            transform: rotate(2.5deg);
+                        }
+
+                        70% {
+                            transform: rotate(5deg);
+                        }
+
+                        82% {
+                            transform: rotate(-3.5deg);
+                        }
+
+                        100% {
+                            transform: rotate(-5.5deg);
+                        }
+                    }
+
+                    @keyframes wheel-spin-left {
+                        from {
+                            transform: rotate(0deg);
+                        }
+
+                        to {
+                            transform: rotate(-360deg);
+                        }
+                    }
+
+                    @keyframes wheel-spin-right {
+                        from {
+                            transform: rotate(0deg);
+                        }
+
+                        to {
+                            transform: rotate(360deg);
+                        }
+                    }
+
+                    @keyframes glow-pulse {
+
+                        0%,
+                        100% {
+                            opacity: 0.12;
+                            transform: scale(0.85);
+                        }
+
+                        50% {
+                            opacity: 0.38;
+                            transform: scale(1.25);
+                        }
+                    }
+
+                    @keyframes signal-flow {
+                        0% {
+                            stroke-dashoffset: 120;
+                            opacity: 0.15;
+                        }
+
+                        50% {
+                            opacity: 0.85;
+                        }
+
+                        100% {
+                            stroke-dashoffset: 0;
+                            opacity: 0.15;
+                        }
+                    }
+
+                    @keyframes grid-drift {
+                        0% {
+                            background-position: 0 0;
+                        }
+
+                        100% {
+                            background-position: 160px 160px;
+                        }
+                    }
+
+                    @keyframes telemetry-pulse {
+
+                        0%,
+                        100% {
+                            opacity: 0.15;
+                            transform: scale(0.8);
+                        }
+
+                        50% {
+                            opacity: 0.9;
+                            transform: scale(1.25);
+                        }
+                    }
+
+                    @keyframes controller-bars {
+
+                        0%,
+                        100% {
+                            transform: scaleY(0.35);
+                            opacity: 0.35;
+                        }
+
+                        25% {
+                            transform: scaleY(0.95);
+                            opacity: 0.85;
+                        }
+
+                        50% {
+                            transform: scaleY(0.55);
+                            opacity: 0.55;
+                        }
+
+                        75% {
+                            transform: scaleY(1.2);
+                            opacity: 1;
+                        }
+                    }
+
+                    @keyframes base-glow {
+
+                        0%,
+                        100% {
+                            opacity: 0.18;
+                        }
+
+                        50% {
+                            opacity: 0.65;
+                        }
+                    }
+
+                    .control-cart {
+                        animation: cart-control 4.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+                        transform-box: fill-box;
+                        transform-origin: center;
+                        will-change: transform;
+                    }
+
+                    .control-pendulum {
+                        animation: pendulum-balance 1.65s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+                        transform-box: view-box;
+                        transform-origin: 400px 300px;
+                        will-change: transform;
+                    }
+
+                    .control-wheel-left {
+                        animation: wheel-spin-left 1.1s linear infinite;
+                        transform-box: fill-box;
+                        transform-origin: center;
+                    }
+
+                    .control-wheel-right {
+                        animation: wheel-spin-right 1.1s linear infinite;
+                        transform-box: fill-box;
+                        transform-origin: center;
+                    }
+
+                    .control-glow {
+                        animation: glow-pulse 1.6s ease-in-out infinite;
+                        transform-box: fill-box;
+                        transform-origin: center;
+                        will-change: transform, opacity;
+                    }
+
+                    .control-signal {
+                        stroke-dasharray: 14 14;
+                        animation: signal-flow 1.25s linear infinite;
+                    }
+
+                    .control-grid {
+                        animation: grid-drift 16s linear infinite;
+                    }
+
+                    .telemetry-dot {
+                        animation: telemetry-pulse 1.4s ease-in-out infinite;
+                        transform-box: fill-box;
+                        transform-origin: center;
+                    }
+
+                    .telemetry-dot:nth-of-type(2) {
+                        animation-delay: 0.25s;
+                    }
+
+                    .telemetry-dot:nth-of-type(3) {
+                        animation-delay: 0.5s;
+                    }
+
+                    .controller-bar {
+                        animation: controller-bars 1.2s ease-in-out infinite;
+                        transform-box: fill-box;
+                        transform-origin: bottom;
+                    }
+
+                    .controller-bar:nth-child(2) {
+                        animation-delay: 0.15s;
+                    }
+
+                    .controller-bar:nth-child(3) {
+                        animation-delay: 0.3s;
+                    }
+
+                    .controller-bar:nth-child(4) {
+                        animation-delay: 0.45s;
+                    }
+
+                    .base-active-glow {
+                        animation: base-glow 1.4s ease-in-out infinite;
+                    }
+
+                    @media (prefers-reduced-motion: reduce) {
+
+                        .control-cart,
+                        .control-pendulum,
+                        .control-wheel-left,
+                        .control-wheel-right,
+                        .control-glow,
+                        .control-signal,
+                        .control-grid,
+                        .telemetry-dot,
+                        .controller-bar,
+                        .base-active-glow {
+                            animation: none !important;
+                        }
+                    }
+                </style>
+
+                <!-- Outer glow -->
+                <div
+                    class="absolute -bottom-6 left-1/2 h-24 w-4/5 -translate-x-1/2 rounded-full bg-cyan-400/20 blur-3xl">
+                </div>
+
+                <div
+                    class="relative overflow-hidden rounded-[28px] border border-cyan-400/10 bg-white/5 shadow-[0_0_0_1px_rgba(255,255,255,0.03),0_30px_80px_rgba(0,0,0,0.35)] backdrop-blur-sm">
+
+                    <!-- Main visual -->
+                    <div
+                        class="relative flex min-h-[440px] items-center justify-center overflow-hidden p-6 sm:min-h-[520px] sm:p-10">
+
+                        <!-- Animated background grid -->
+                        <div
+                            class="control-grid absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(34,211,238,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.08)_1px,transparent_1px)] [background-size:160px_160px]">
+                        </div>
+
+                        <!-- Center radial light -->
+                        <div
+                            class="pointer-events-none absolute left-1/2 top-1/2 h-[480px] w-[480px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/10 blur-3xl">
+                        </div>
+
+                        <svg viewBox="0 0 800 520" class="relative z-10 h-full w-full max-w-[760px]">
+
+                            <!-- Background controller rings -->
+                            <circle cx="400" cy="300" r="150" fill="none" stroke="rgba(34,211,238,0.06)"
+                                stroke-width="2" />
+
+                            <circle cx="400" cy="300" r="95" fill="none" stroke="rgba(34,211,238,0.08)" stroke-width="2"
+                                stroke-dasharray="8 14" class="control-signal" />
+
+                            <!-- Base rail -->
+                            <line x1="160" y1="370" x2="640" y2="370" stroke="rgba(34,211,238,0.14)" stroke-width="3"
+                                stroke-linecap="round" />
+
+                            <!-- Active base signal -->
+                            <line x1="180" y1="370" x2="620" y2="370" stroke="#22d3ee" stroke-width="2"
+                                stroke-linecap="round" class="control-signal base-active-glow" />
+
+                            <!-- Subtle rail ticks -->
+                            <g opacity="0.25" stroke="#22d3ee" stroke-width="2">
+                                <line x1="210" y1="362" x2="210" y2="378" />
+                                <line x1="280" y1="362" x2="280" y2="378" />
+                                <line x1="350" y1="362" x2="350" y2="378" />
+                                <line x1="420" y1="362" x2="420" y2="378" />
+                                <line x1="490" y1="362" x2="490" y2="378" />
+                                <line x1="560" y1="362" x2="560" y2="378" />
+                            </g>
+
+                            <!-- Control paths -->
+                            <path d="M265 230 C320 190, 360 175, 400 160 C450 140, 500 155, 548 205" fill="none"
+                                stroke="rgba(34,211,238,0.16)" stroke-width="2" stroke-dasharray="8 12"
+                                class="control-signal" />
+
+                            <path d="M245 315 C310 270, 355 265, 400 300 C455 342, 520 335, 585 285" fill="none"
+                                stroke="rgba(34,211,238,0.13)" stroke-width="2" stroke-dasharray="6 12"
+                                class="control-signal" />
+
+                            <!-- Telemetry dots -->
+                            <circle class="telemetry-dot" cx="265" cy="230" r="4" fill="#22d3ee" />
+                            <circle class="telemetry-dot" cx="548" cy="205" r="4" fill="#22d3ee" />
+                            <circle class="telemetry-dot" cx="585" cy="285" r="3.5" fill="#22d3ee" />
+
+                            <!-- Shadow under cart -->
+                            <ellipse cx="400" cy="381" rx="132" ry="18" fill="rgba(34,211,238,0.12)"
+                                class="control-cart" />
+
+                            <!-- Cart and pendulum system centered -->
+                            <g class="control-cart">
+
+                                <!-- Cart body -->
+                                <rect x="320" y="300" width="160" height="58" rx="14" fill="rgba(15,23,42,0.78)"
+                                    stroke="#22d3ee" stroke-width="3" />
+
+                                <!-- Cart inner glow -->
+                                <rect x="330" y="310" width="140" height="18" rx="8" fill="rgba(34,211,238,0.08)" />
+
+                                <!-- Cart highlight -->
+                                <path d="M338 313 H462" stroke="rgba(255,255,255,0.38)" stroke-width="2"
+                                    stroke-linecap="round" />
+
+                                <!-- Controller bars on cart -->
+                                <g transform="translate(348 336)" fill="#22d3ee" opacity="0.75">
+                                    <rect class="controller-bar" x="0" y="-18" width="6" height="18" rx="3" />
+                                    <rect class="controller-bar" x="14" y="-24" width="6" height="24" rx="3" />
+                                    <rect class="controller-bar" x="28" y="-14" width="6" height="14" rx="3" />
+                                    <rect class="controller-bar" x="42" y="-28" width="6" height="28" rx="3" />
+                                </g>
+
+                                <!-- Left wheel -->
+                                <g class="control-wheel-left">
+                                    <circle cx="348" cy="358" r="15" fill="rgba(15,23,42,0.95)" stroke="#22d3ee"
+                                        stroke-width="3" />
+                                    <line x1="348" y1="345" x2="348" y2="371" stroke="#22d3ee" stroke-width="2" />
+                                    <line x1="335" y1="358" x2="361" y2="358" stroke="#22d3ee" stroke-width="2" />
+                                </g>
+
+                                <!-- Right wheel -->
+                                <g class="control-wheel-right">
+                                    <circle cx="452" cy="358" r="15" fill="rgba(15,23,42,0.95)" stroke="#22d3ee"
+                                        stroke-width="3" />
+                                    <line x1="452" y1="345" x2="452" y2="371" stroke="#22d3ee" stroke-width="2" />
+                                    <line x1="439" y1="358" x2="465" y2="358" stroke="#22d3ee" stroke-width="2" />
+                                </g>
+
+                                <!-- Pendulum rotates around pivot in vertical inverted state -->
+                                <g class="control-pendulum">
+
+                                    <!-- Vertical reference line -->
+                                    <line x1="400" y1="300" x2="400" y2="145" stroke="rgba(255,255,255,0.12)"
+                                        stroke-width="2" stroke-dasharray="5 10" />
+
+                                    <!-- Pendulum glow around bob -->
+                                    <circle cx="400" cy="145" r="40" fill="#22d3ee" opacity="0.16"
+                                        class="control-glow" />
+
+                                    <!-- Rod -->
+                                    <line x1="400" y1="300" x2="400" y2="145" stroke="#22d3ee" stroke-width="5"
+                                        stroke-linecap="round" />
+
+                                    <!-- Bob -->
+                                    <circle cx="400" cy="145" r="16" fill="#22d3ee" />
+
+                                    <circle cx="394" cy="139" r="5" fill="white" opacity="0.65" />
+                                </g>
+
+                                <!-- Pivot glow -->
+                                <circle cx="400" cy="300" r="26" fill="#22d3ee" opacity="0.12" class="control-glow" />
+
+                                <!-- Pivot -->
+                                <circle cx="400" cy="300" r="8" fill="#22d3ee" />
+
+                                <circle cx="400" cy="300" r="3" fill="white" opacity="0.65" />
+                            </g>
+
+                            <!-- Direction arrows -->
+                            <g opacity="0.55" stroke="#22d3ee" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M260 410 H330" class="control-signal" />
+                                <path d="M260 410 L275 400" />
+                                <path d="M260 410 L275 420" />
+
+                                <path d="M540 410 H470" class="control-signal" />
+                                <path d="M540 410 L525 400" />
+                                <path d="M540 410 L525 420" />
+                            </g>
+
+                        </svg>
+
+                        <div
+                            class="absolute bottom-5 left-1/2 -translate-x-1/2 text-center text-sm font-medium tracking-wide text-white/40 sm:text-base">
+                            Inverted Pendulum Control
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </section>
+
+    <!-- Trust Bar Section -->
+    <section class="relative overflow-hidden bg-[#070d1b] px-6 py-20 sm:px-8 lg:px-10">
+        <!-- Background Effects -->
+        <div
+            class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(34,211,238,0.08),transparent_35%)]">
+        </div>
+        <div
+            class="pointer-events-none absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] [background-size:42px_42px]">
+        </div>
+
+        <div class="relative z-10 mx-auto max-w-[1200px]">
+
+            <!-- Section Title -->
+            <div class="mb-12 text-center">
+                <p class="text-sm font-semibold uppercase tracking-[0.35em] text-white/55 sm:text-base md:text-lg">
+                    Enterprise-Grade Integration
+                </p>
+            </div>
+
+            <!-- Cards Grid -->
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+                <!-- Card 1 -->
+                <div
+                    class="group flex min-h-[120px] flex-col items-center justify-center rounded-xl border border-white/5 bg-white/[0.045] px-6 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition hover:-translate-y-1 hover:border-cyan-400/20 hover:bg-white/[0.07]">
+                    <div class="mb-4 text-4xl transition group-hover:scale-110">
+                        ⚙️
+                    </div>
+                    <h3 class="text-lg font-medium text-white/65 sm:text-xl">
+                        MATLAB Compatible
+                    </h3>
+                </div>
+
+                <!-- Card 2 -->
+                <div
+                    class="group flex min-h-[120px] flex-col items-center justify-center rounded-xl border border-white/5 bg-white/[0.045] px-6 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition hover:-translate-y-1 hover:border-cyan-400/20 hover:bg-white/[0.07]">
+                    <div class="mb-4 text-4xl transition group-hover:scale-110">
+                        🤖
+                    </div>
+                    <h3 class="text-lg font-medium text-white/65 sm:text-xl">
+                        ROS Ready
+                    </h3>
+                </div>
+
+                <!-- Card 3 -->
+                <div
+                    class="group flex min-h-[120px] flex-col items-center justify-center rounded-xl border border-white/5 bg-white/[0.045] px-6 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition hover:-translate-y-1 hover:border-cyan-400/20 hover:bg-white/[0.07]">
+                    <div class="mb-4 text-4xl transition group-hover:scale-110">
+                        🍓
+                    </div>
+                    <h3 class="text-lg font-medium text-white/65 sm:text-xl">
+                        Raspberry Pi
+                    </h3>
+                </div>
+
+                <!-- Card 4 -->
+                <div
+                    class="group flex min-h-[120px] flex-col items-center justify-center rounded-xl border border-white/5 bg-white/[0.045] px-6 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition hover:-translate-y-1 hover:border-cyan-400/20 hover:bg-white/[0.07]">
+                    <div class="mb-4 text-4xl transition group-hover:scale-110">
+                        🛡️
+                    </div>
+                    <h3 class="text-lg font-medium text-white/65 sm:text-xl">
+                        Safety-Critical Ready
+                    </h3>
+                </div>
+
+                <!-- Card 5 - Changed Text -->
+                <div
+                    class="group flex min-h-[120px] flex-col items-center justify-center rounded-xl border border-white/5 bg-white/[0.045] px-6 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition hover:-translate-y-1 hover:border-cyan-400/20 hover:bg-white/[0.07]">
+                    <div class="mb-4 text-4xl transition group-hover:scale-110">
+                        📊
+                    </div>
+                    <h3 class="text-lg font-medium text-white/65 sm:text-xl">
+                        Modular Design Pattern
+                    </h3>
+                </div>
+
+                <!-- Card 6 -->
+                <div
+                    class="group flex min-h-[120px] flex-col items-center justify-center rounded-xl border border-white/5 bg-white/[0.045] px-6 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition hover:-translate-y-1 hover:border-cyan-400/20 hover:bg-white/[0.07]">
+                    <div class="mb-4 text-4xl transition group-hover:scale-110">
+                        ⚡
+                    </div>
+                    <h3 class="text-lg font-medium text-white/65 sm:text-xl">
+                        Real-time Capable
+                    </h3>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="relative overflow-hidden bg-[#050b18] px-6 py-24 sm:px-8 lg:px-10">
+
+        <!-- Background Effects -->
+        <div
+            class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.08),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(37,99,235,0.08),transparent_35%)]">
+        </div>
+
+        <div
+            class="pointer-events-none absolute inset-0 opacity-35 [background-image:linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] [background-size:42px_42px]">
+        </div>
+
+        <div class="relative z-10 mx-auto max-w-[1200px]">
+
+            <!-- Section Header -->
+            <div class="mx-auto mb-14 max-w-3xl text-center">
+                <h2 class="text-4xl font-extrabold tracking-[-0.03em] text-white sm:text-5xl lg:text-[54px]">
+                    Powerful Features
+                </h2>
+
+                <p class="mt-5 text-lg leading-8 text-white/60 sm:text-xl">
+                    Everything you need to design, verify, and deploy production-grade
+                    control systems.
+                </p>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+
+                <!-- Feature 1 -->
+                <article
+                    class="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/[0.045] p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition duration-300 hover:-translate-y-1 hover:border-cyan-400/25 hover:bg-white/[0.07]">
+                    <div
+                        class="absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_35%)]">
+                    </div>
+
+                    <div class="relative z-10">
+                        <div
+                            class="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-cyan-400/10 text-cyan-300 shadow-[0_0_24px_rgba(34,211,238,0.10)]">
+                            <svg xmlns="https://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 7v10M17 7v10M7 12h10" />
+                                <circle cx="7" cy="7" r="2" />
+                                <circle cx="17" cy="17" r="2" />
+                            </svg>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-white">
+                            Control Architecture Design
+                        </h3>
+
+                        <p class="mt-4 text-base leading-7 text-white/58">
+                            Plan your CONTROL system from natural language specifications.
+                            Define goals, constraints, signals, and architecture requirements
+                            before moving into automated controller generation.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- Feature 2 -->
+                <article
+                    class="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/[0.045] p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition duration-300 hover:-translate-y-1 hover:border-cyan-400/25 hover:bg-white/[0.07]">
+                    <div
+                        class="absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_35%)]">
+                    </div>
+
+                    <div class="relative z-10">
+                        <div
+                            class="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-cyan-400/10 text-cyan-300 shadow-[0_0_24px_rgba(34,211,238,0.10)]">
+                            <svg xmlns="https://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-white">
+                            AI-Powered Control Synthesis
+                        </h3>
+
+                        <p class="mt-4 text-base leading-7 text-white/58">
+                            Automated tuning, deployment, feedback collection, and
+                            hyperparameter optimization for MPC, PID, LQR, RL-based, and other
+                            control systems using an iterative design pattern.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- Feature 3 -->
+                <article
+                    class="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/[0.045] p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition duration-300 hover:-translate-y-1 hover:border-cyan-400/25 hover:bg-white/[0.07]">
+                    <div
+                        class="absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_35%)]">
+                    </div>
+
+                    <div class="relative z-10">
+                        <div
+                            class="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-cyan-400/10 text-cyan-300 shadow-[0_0_24px_rgba(34,211,238,0.10)]">
+                            <svg xmlns="https://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7l7-4z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4" />
+                            </svg>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-white">
+                            Modular Design Pattern
+                        </h3>
+
+                        <p class="mt-4 text-base leading-7 text-white/58">
+                            Deliver a modular architecture that allows the integration of
+                            required blocks including disturbance observer, parameter estimator,
+                            state observer, adaptive elements, and robust terms—into the control
+                            system according to mission requirements.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- Feature 4 -->
+                <article
+                    class="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/[0.045] p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition duration-300 hover:-translate-y-1 hover:border-cyan-400/25 hover:bg-white/[0.07]">
+                    <div
+                        class="absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_35%)]">
+                    </div>
+
+                    <div class="relative z-10">
+                        <div
+                            class="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-cyan-400/10 text-cyan-300 shadow-[0_0_24px_rgba(34,211,238,0.10)]">
+                            <svg xmlns="https://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 17h6M12 3v3M5.6 5.6l2.1 2.1M18.4 5.6l-2.1 2.1M4 12h3M17 12h3" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 21h8" />
+                            </svg>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-white">
+                            Multi-Stage Testing
+                            <span class="whitespace-nowrap">(MIL/SIL/PIL)</span>
+                        </h3>
+
+                        <p class="mt-4 text-base leading-7 text-white/58">
+                            Verify your design through Model-in-Loop, Software-in-Loop, and
+                            Processor-in-Loop testing with automated reports and validation
+                            checkpoints.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- Feature 5 -->
+                <article
+                    class="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/[0.045] p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition duration-300 hover:-translate-y-1 hover:border-cyan-400/25 hover:bg-white/[0.07]">
+                    <div
+                        class="absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_35%)]">
+                    </div>
+
+                    <div class="relative z-10">
+                        <div
+                            class="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-cyan-400/10 text-cyan-300 shadow-[0_0_24px_rgba(34,211,238,0.10)]">
+                            <svg xmlns="https://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M5 16c2-6 6-10 14-12-2 8-6 12-12 14l-2 3-1-4-4-1 3-2z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 15l-2-2" />
+                            </svg>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-white">
+                            One-Click Deployment
+                        </h3>
+
+                        <p class="mt-4 text-base leading-7 text-white/58">
+                            Generate optimized C/C++ code and deploy directly to your hardware.
+                            Support for Raspberry Pi, Arduino, STM32, and more.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- Feature 6 -->
+                <article
+                    class="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/[0.045] p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition duration-300 hover:-translate-y-1 hover:border-cyan-400/25 hover:bg-white/[0.07]">
+                    <div
+                        class="absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_35%)]">
+                    </div>
+
+                    <div class="relative z-10">
+                        <div
+                            class="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-cyan-400/10 text-cyan-300 shadow-[0_0_24px_rgba(34,211,238,0.10)]">
+                            <svg xmlns="https://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 19h16" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 16V9" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V5" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 16v-4" />
+                            </svg>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-white">
+                            Simulation & Validation
+                        </h3>
+
+                        <p class="mt-4 text-base leading-7 text-white/58">
+                            Comprehensive simulation environment with scope analysis,
+                            performance metrics, and real-time visualization of control
+                            behavior.
+                        </p>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Section -->
+    <section id="workflow" class="relative overflow-hidden bg-[#050b18] px-6 py-24 sm:px-8 lg:px-10">
+
+        <!-- Background Effects -->
+        <div
+            class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(14,165,233,0.10),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(34,211,238,0.07),transparent_34%)]">
+        </div>
+        <div
+            class="pointer-events-none absolute inset-0 opacity-30 [background-image:linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] [background-size:42px_42px]">
+        </div>
+
+        <div class="relative z-10 mx-auto max-w-[900px]">
+
+            <!-- Section Header -->
+            <div class="mx-auto mb-16 max-w-3xl text-center">
+                <h2 class="text-4xl font-extrabold tracking-[-0.03em] text-white sm:text-5xl lg:text-[54px]">
+                    How It Works
+                </h2>
+
+                <p class="mt-5 text-lg leading-8 text-white/60 sm:text-xl">
+                    A streamlined pipeline from specification to deployed system.
+                </p>
+            </div>
+
+            <!-- Workflow Single Column Card -->
+            <div
+                class="relative rounded-2xl border border-white/5 bg-white/[0.04] p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:p-8 lg:p-10">
+
+                <!-- Timeline Item 1 -->
+                <div class="relative flex gap-6 pb-14">
+
+                    <!-- Vertical Line -->
+                    <div class="absolute left-6 top-14 h-[calc(100%-3.5rem)] w-px bg-cyan-400/25"></div>
+
+                    <!-- Icon -->
+                    <div
+                        class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-cyan-400 text-[#06111f] shadow-[0_0_30px_rgba(34,211,238,0.25)]">
+                        <svg xmlns="https://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2.4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l-4 3 4 3M16 9l4 3-4 3" />
+                        </svg>
+                    </div>
+
+                    <!-- Content -->
+                    <div>
+                        <h3 class="text-xl font-bold text-white sm:text-2xl">
+                            Natural Language Prompt
+                        </h3>
+
+                        <p class="mt-3 text-base leading-7 text-white/58">
+                            Describe your control system requirements in plain English:
+                            <span class="text-white/75">
+                                "Design an adaptive trajectory tracking controller for this quadrotor with minimized
+                                control effort."
+                            </span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 2 -->
+                <div class="relative flex gap-6 pb-14">
+
+                    <!-- Vertical Line -->
+                    <div class="absolute left-6 top-14 h-[calc(100%-3.5rem)] w-px bg-cyan-400/25"></div>
+
+                    <!-- Icon -->
+                    <div
+                        class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-cyan-400 text-[#06111f] shadow-[0_0_30px_rgba(34,211,238,0.25)]">
+                        <svg xmlns="https://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2.4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 7v10M17 7v10M7 12h10" />
+                            <circle cx="7" cy="7" r="2" />
+                            <circle cx="17" cy="17" r="2" />
+                        </svg>
+                    </div>
+
+                    <!-- Content -->
+                    <div>
+                        <h3 class="text-xl font-bold text-white sm:text-2xl">
+                            Agent Planning & Analysis
+                        </h3>
+
+                        <p class="mt-3 text-base leading-7 text-white/58">
+                            AI agents decompose requirements, analyze your system dynamics,
+                            and propose an optimal control architecture.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 3 -->
+                <div class="relative flex gap-6 pb-14">
+
+                    <!-- Vertical Line -->
+                    <div class="absolute left-6 top-14 h-[calc(100%-3.5rem)] w-px bg-cyan-400/25"></div>
+
+                    <!-- Icon -->
+                    <div
+                        class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-cyan-400 text-[#06111f] shadow-[0_0_30px_rgba(34,211,238,0.25)]">
+                        <svg xmlns="https://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2.4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 4v10l-7 4-7-4V7l7-4z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 12l7-4M12 12v9M12 12L5 8" />
+                        </svg>
+                    </div>
+
+                    <!-- Content -->
+                    <div>
+                        <h3 class="text-xl font-bold text-white sm:text-2xl">
+                            Iterative Parameter Tuning
+                        </h3>
+
+                        <p class="mt-3 text-base leading-7 text-white/58">
+                            Iteratively tune the parameters of each architectural block by
+                            leveraging effective feedback from the closed-loop system response,
+                            using AI agents empowered by efficient context engineering.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 4 -->
+                <div class="relative flex gap-6 pb-14">
+
+                    <!-- Vertical Line -->
+                    <div class="absolute left-6 top-14 h-[calc(100%-3.5rem)] w-px bg-cyan-400/25"></div>
+
+                    <!-- Icon -->
+                    <div
+                        class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-cyan-400 text-[#06111f] shadow-[0_0_30px_rgba(34,211,238,0.25)]">
+                        <svg xmlns="https://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2.4">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 17h6M12 3v3M5.6 5.6l2.1 2.1M18.4 5.6l-2.1 2.1M4 12h3M17 12h3" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 21h8" />
+                        </svg>
+                    </div>
+
+                    <!-- Content -->
+                    <div>
+                        <h3 class="text-xl font-bold text-white sm:text-2xl">
+                            Verification & Testing
+                        </h3>
+
+                        <p class="mt-3 text-base leading-7 text-white/58">
+                            Run MIL, SIL, and PIL tests automatically. Generate traceability
+                            reports and safety documentation.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 5 -->
+                <div class="relative flex gap-6">
+
+                    <!-- Icon -->
+                    <div
+                        class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-cyan-400 text-[#06111f] shadow-[0_0_30px_rgba(34,211,238,0.25)]">
+                        <svg xmlns="https://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2.4">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M5 16c2-6 6-10 14-12-2 8-6 12-12 14l-2 3-1-4-4-1 3-2z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 15l-2-2" />
+                        </svg>
+                    </div>
+
+                    <!-- Content -->
+                    <div>
+                        <h3 class="text-xl font-bold text-white sm:text-2xl">
+                            Hardware Deployment
+                        </h3>
+
+                        <p class="mt-3 text-base leading-7 text-white/58">
+                            One-click deployment of optimized C/C++ code to your target
+                            platform. Real-time monitoring and logging included.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Differentiation Section -->
+    <section id="differentiation" class="relative overflow-hidden bg-[#050b18] px-6 py-24 sm:px-8 lg:px-10">
+
+        <!-- Background Effects -->
+        <div
+            class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.09),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(14,165,233,0.08),transparent_32%)]">
+        </div>
+        <div
+            class="pointer-events-none absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] [background-size:42px_42px]">
+        </div>
+
+        <div class="relative z-10 mx-auto max-w-[1120px]">
+
+            <!-- Section Header -->
+            <div class="mx-auto mb-14 max-w-3xl text-center">
+                <h2 class="text-4xl font-extrabold tracking-[-0.03em] text-white sm:text-5xl lg:text-[54px]">
+                    Why LabCD?
+                </h2>
+
+                <p class="mt-5 text-lg leading-8 text-white/55 sm:text-xl">
+                    The next evolution in control system design. Not scripting. Not manual
+                    tuning. Intelligent, structured engineering.
+                </p>
+            </div>
+
+            <!-- Comparison Table Card -->
+            <div
+                class="overflow-hidden rounded-2xl border border-cyan-400/10 bg-white/[0.035] shadow-[0_24px_80px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.05)]">
+
+                <!-- Desktop / Tablet Table -->
+                <div class="hidden overflow-x-auto md:block">
+                    <table class="w-full border-collapse text-left">
+
+                        <!-- Table Head -->
+                        <thead>
+                            <tr class="border-b border-white/8 bg-white/[0.025]">
+                                <th class="w-[50%] px-7 py-5 text-sm font-bold text-white/85">
+                                    Feature
+                                </th>
+
+                                <th class="w-[25%] px-7 py-5 text-center text-sm font-bold text-cyan-300">
+                                    LabCD
+                                </th>
+
+                                <th class="w-[25%] px-7 py-5 text-center text-sm font-bold text-white/65">
+                                    Traditional Approach
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <!-- Table Body -->
+                        <tbody class="divide-y divide-white/[0.06]">
+
+                            <!-- Row 1 -->
+                            <tr class="transition hover:bg-white/[0.025]">
+                                <td class="px-7 py-5 text-base font-semibold text-white/80">
+                                    Start from Prompt
+                                </td>
+                                <td class="px-7 py-5 text-center">
+                                    <span class="text-2xl font-bold text-cyan-300">✓</span>
+                                </td>
+                                <td class="px-7 py-5 text-center">
+                                    <span class="text-xl text-white/25">—</span>
+                                </td>
+                            </tr>
+
+                            <!-- Row 2 -->
+                            <tr class="transition hover:bg-white/[0.025]">
+                                <td class="px-7 py-5 text-base font-semibold text-white/80">
+                                    AI-Powered Synthesis
+                                </td>
+                                <td class="px-7 py-5 text-center">
+                                    <span class="text-2xl font-bold text-cyan-300">✓</span>
+                                </td>
+                                <td class="px-7 py-5 text-center">
+                                    <span class="text-xl text-white/25">—</span>
+                                </td>
+                            </tr>
+
+                            <!-- Row 3 -->
+                            <tr class="transition hover:bg-white/[0.025]">
+                                <td class="px-7 py-5 text-base font-semibold text-white/80">
+                                    Model-Based Design
+                                </td>
+                                <td class="px-7 py-5 text-center">
+                                    <span class="text-2xl font-bold text-cyan-300">✓</span>
+                                </td>
+                                <td class="px-7 py-5 text-center">
+                                    <span class="text-2xl text-white/45">✓</span>
+                                </td>
+                            </tr>
+
+                            <!-- Row 4 -->
+                            <tr class="transition hover:bg-white/[0.025]">
+                                <td class="px-7 py-5 text-base font-semibold text-white/80">
+                                    Automatic Code Generation
+                                </td>
+                                <td class="px-7 py-5 text-center">
+                                    <span class="text-2xl font-bold text-cyan-300">✓</span>
+                                </td>
+                                <td class="px-7 py-5 text-center">
+                                    <span class="text-xl text-white/25">—</span>
+                                </td>
+                            </tr>
+
+                            <!-- Row 5 -->
+                            <tr class="transition hover:bg-white/[0.025]">
+                                <td class="px-7 py-5 text-base font-semibold text-white/80">
+                                    Integrated Testing
+                                </td>
+                                <td class="px-7 py-5 text-center">
+                                    <span class="text-2xl font-bold text-cyan-300">✓</span>
+                                </td>
+                                <td class="px-7 py-5 text-center">
+                                    <span class="text-xl text-white/25">—</span>
+                                </td>
+                            </tr>
+
+                            <!-- Row 6 -->
+                            <tr class="transition hover:bg-white/[0.025]">
+                                <td class="px-7 py-5 text-base font-semibold text-white/80">
+                                    Safety-Critical Ready
+                                </td>
+                                <td class="px-7 py-5 text-center">
+                                    <span class="text-2xl font-bold text-cyan-300">✓</span>
+                                </td>
+                                <td class="px-7 py-5 text-center">
+                                    <span class="text-xl text-white/25">—</span>
+                                </td>
+                            </tr>
+
+                            <!-- Row 7 -->
+                            <tr class="transition hover:bg-white/[0.025]">
+                                <td class="px-7 py-5 text-base font-semibold text-white/80">
+                                    Requires Deep Expertise
+                                </td>
+                                <td class="px-7 py-5 text-center">
+                                    <span class="text-xl text-white/25">—</span>
+                                </td>
+                                <td class="px-7 py-5 text-center">
+                                    <span class="text-2xl text-white/45">✓</span>
+                                </td>
+                            </tr>
+
+                            <!-- Row 8 -->
+                            <tr class="transition hover:bg-white/[0.025]">
+                                <td class="px-7 py-5 text-base font-semibold text-white/80">
+                                    Weeks to Deploy
+                                </td>
+                                <td class="px-7 py-5 text-center">
+                                    <span class="text-xl text-white/25">—</span>
+                                </td>
+                                <td class="px-7 py-5 text-center">
+                                    <span class="text-2xl text-white/45">✓</span>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Mobile Cards -->
+                <div class="block divide-y divide-white/[0.06] md:hidden">
+
+                    <!-- Mobile Item -->
+                    <div class="p-5">
+                        <h3 class="text-base font-bold text-white/85">Start from Prompt</h3>
+                        <div class="mt-4 grid grid-cols-2 gap-3">
+                            <div class="rounded-xl bg-cyan-400/10 p-3 text-center">
+                                <p class="text-xs font-semibold text-cyan-300">LabCD</p>
+                                <p class="mt-1 text-2xl font-bold text-cyan-300">✓</p>
+                            </div>
+                            <div class="rounded-xl bg-white/[0.035] p-3 text-center">
+                                <p class="text-xs font-semibold text-white/50">Traditional</p>
+                                <p class="mt-1 text-xl text-white/25">—</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-5">
+                        <h3 class="text-base font-bold text-white/85">AI-Powered Synthesis</h3>
+                        <div class="mt-4 grid grid-cols-2 gap-3">
+                            <div class="rounded-xl bg-cyan-400/10 p-3 text-center">
+                                <p class="text-xs font-semibold text-cyan-300">LabCD</p>
+                                <p class="mt-1 text-2xl font-bold text-cyan-300">✓</p>
+                            </div>
+                            <div class="rounded-xl bg-white/[0.035] p-3 text-center">
+                                <p class="text-xs font-semibold text-white/50">Traditional</p>
+                                <p class="mt-1 text-xl text-white/25">—</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-5">
+                        <h3 class="text-base font-bold text-white/85">Model-Based Design</h3>
+                        <div class="mt-4 grid grid-cols-2 gap-3">
+                            <div class="rounded-xl bg-cyan-400/10 p-3 text-center">
+                                <p class="text-xs font-semibold text-cyan-300">LabCD</p>
+                                <p class="mt-1 text-2xl font-bold text-cyan-300">✓</p>
+                            </div>
+                            <div class="rounded-xl bg-white/[0.035] p-3 text-center">
+                                <p class="text-xs font-semibold text-white/50">Traditional</p>
+                                <p class="mt-1 text-2xl text-white/45">✓</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-5">
+                        <h3 class="text-base font-bold text-white/85">Automatic Code Generation</h3>
+                        <div class="mt-4 grid grid-cols-2 gap-3">
+                            <div class="rounded-xl bg-cyan-400/10 p-3 text-center">
+                                <p class="text-xs font-semibold text-cyan-300">LabCD</p>
+                                <p class="mt-1 text-2xl font-bold text-cyan-300">✓</p>
+                            </div>
+                            <div class="rounded-xl bg-white/[0.035] p-3 text-center">
+                                <p class="text-xs font-semibold text-white/50">Traditional</p>
+                                <p class="mt-1 text-xl text-white/25">—</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-5">
+                        <h3 class="text-base font-bold text-white/85">Integrated Testing</h3>
+                        <div class="mt-4 grid grid-cols-2 gap-3">
+                            <div class="rounded-xl bg-cyan-400/10 p-3 text-center">
+                                <p class="text-xs font-semibold text-cyan-300">LabCD</p>
+                                <p class="mt-1 text-2xl font-bold text-cyan-300">✓</p>
+                            </div>
+                            <div class="rounded-xl bg-white/[0.035] p-3 text-center">
+                                <p class="text-xs font-semibold text-white/50">Traditional</p>
+                                <p class="mt-1 text-xl text-white/25">—</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-5">
+                        <h3 class="text-base font-bold text-white/85">Safety-Critical Ready</h3>
+                        <div class="mt-4 grid grid-cols-2 gap-3">
+                            <div class="rounded-xl bg-cyan-400/10 p-3 text-center">
+                                <p class="text-xs font-semibold text-cyan-300">LabCD</p>
+                                <p class="mt-1 text-2xl font-bold text-cyan-300">✓</p>
+                            </div>
+                            <div class="rounded-xl bg-white/[0.035] p-3 text-center">
+                                <p class="text-xs font-semibold text-white/50">Traditional</p>
+                                <p class="mt-1 text-xl text-white/25">—</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-5">
+                        <h3 class="text-base font-bold text-white/85">Requires Deep Expertise</h3>
+                        <div class="mt-4 grid grid-cols-2 gap-3">
+                            <div class="rounded-xl bg-cyan-400/10 p-3 text-center">
+                                <p class="text-xs font-semibold text-cyan-300">LabCD</p>
+                                <p class="mt-1 text-xl text-white/25">—</p>
+                            </div>
+                            <div class="rounded-xl bg-white/[0.035] p-3 text-center">
+                                <p class="text-xs font-semibold text-white/50">Traditional</p>
+                                <p class="mt-1 text-2xl text-white/45">✓</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-5">
+                        <h3 class="text-base font-bold text-white/85">Weeks to Deploy</h3>
+                        <div class="mt-4 grid grid-cols-2 gap-3">
+                            <div class="rounded-xl bg-cyan-400/10 p-3 text-center">
+                                <p class="text-xs font-semibold text-cyan-300">LabCD</p>
+                                <p class="mt-1 text-xl text-white/25">—</p>
+                            </div>
+                            <div class="rounded-xl bg-white/[0.035] p-3 text-center">
+                                <p class="text-xs font-semibold text-white/50">Traditional</p>
+                                <p class="mt-1 text-2xl text-white/45">✓</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="relative overflow-hidden bg-[#050b18] px-6 py-24 sm:px-8 lg:px-10">
+
+        <!-- Background Effects -->
+        <div
+            class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(14,165,233,0.10),transparent_34%),radial-gradient(circle_at_bottom,rgba(34,211,238,0.08),transparent_35%)]">
+        </div>
+        <div
+            class="pointer-events-none absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] [background-size:42px_42px]">
+        </div>
+
+        <div class="relative z-10 mx-auto max-w-[980px]">
+
+            <!-- Section Header -->
+            <div class="mx-auto mb-12 max-w-3xl text-center">
+                <h2 class="text-4xl font-extrabold tracking-[-0.03em] text-white sm:text-5xl lg:text-[54px]">
+                    See It In Action
+                </h2>
+
+                <p class="mt-5 text-lg leading-8 text-white/55 sm:text-xl">
+                    Watch how a control system goes from prompt to deployment in minutes.
+                </p>
+            </div>
+
+            <!-- Video Placeholder Card -->
+            <div
+                class="relative mx-auto overflow-hidden rounded-3xl border border-cyan-400/10 bg-[#111c2c]/90 p-4 shadow-[0_30px_100px_rgba(0,0,0,0.45),0_0_70px_rgba(34,211,238,0.10),inset_0_1px_0_rgba(255,255,255,0.06)] sm:p-6">
+
+                <!-- Inner Video Area -->
+                <div class="relative aspect-video overflow-hidden rounded-2xl border border-cyan-400/10 bg-[#101a2a]">
+
+                    <!-- Subtle Grid -->
+                    <div
+                        class="pointer-events-none absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(34,211,238,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.08)_1px,transparent_1px)] [background-size:38px_38px]">
+                    </div>
+
+                    <!-- Glow Background -->
+                    <div
+                        class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(34,211,238,0.12),transparent_38%)]">
+                    </div>
+
+                    <!-- Decorative Small Panels -->
+                    <div
+                        class="absolute left-5 top-5 hidden h-24 w-44 rounded-md border border-cyan-400/10 bg-white/[0.025] sm:block">
+                    </div>
+                    <div
+                        class="absolute right-5 top-5 hidden h-36 w-44 rounded-md border border-cyan-400/10 bg-white/[0.025] sm:block">
+                    </div>
+
+                    <!-- Decorative Curve Line -->
+                    <svg class="pointer-events-none absolute inset-0 h-full w-full opacity-35" viewBox="0 0 900 506"
+                        fill="none" xmlns="https://www.w3.org/2000/svg">
+                        <path d="M75 285C180 245 310 245 420 275C535 306 610 330 735 315C785 309 835 292 860 276"
+                            stroke="url(#demoLineGradient)" stroke-width="2" fill="none" />
+                        <defs>
+                            <linearGradient id="demoLineGradient" x1="75" y1="285" x2="860" y2="285"
+                                gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#22D3EE" stop-opacity="0.15" />
+                                <stop offset="0.5" stop-color="#22D3EE" stop-opacity="0.65" />
+                                <stop offset="1" stop-color="#22D3EE" stop-opacity="0.15" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+
+                    <!-- Center Play Button Wrapper -->
+                    <button type="button" aria-label="Play demo video"
+                        class="group absolute left-1/2 top-1/2 z-20 flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-cyan-300/15 bg-cyan-400/5 shadow-[0_0_60px_rgba(34,211,238,0.20)] transition duration-300 hover:scale-105 hover:bg-cyan-400/10">
+                        <!-- Outer Ring -->
+                        <span class="absolute inset-0 rounded-full border border-cyan-300/20"></span>
+
+                        <!-- Play Circle -->
+                        <span
+                            class="relative flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 text-[#06111f] shadow-[0_0_35px_rgba(34,211,238,0.35)] transition duration-300 group-hover:shadow-[0_0_55px_rgba(34,211,238,0.55)]">
+                            <svg xmlns="https://www.w3.org/2000/svg" class="ml-1 h-7 w-7 text-[#020817]"
+                                viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M8 5v14l11-7L8 5z" />
+                            </svg>
+                        </span>
+                    </button>
+
+                    <!-- Bottom Glow -->
+                    <div
+                        class="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-cyan-400/10 to-transparent">
+                    </div>
+                </div>
+
+                <!-- Video Caption -->
+                <p class="mt-6 text-center text-sm font-medium text-white/45 sm:text-base">
+                    YouTube video embed would go here • 12 minutes
+                </p>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="relative overflow-hidden bg-[#050b18] px-6 py-24 sm:px-8 lg:px-10">
+
+        <!-- Background Effects -->
+        <div
+            class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.08),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(37,99,235,0.08),transparent_35%)]">
+        </div>
+        <div
+            class="pointer-events-none absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] [background-size:42px_42px]">
+        </div>
+
+        <div class="relative z-10 mx-auto max-w-[1120px]">
+
+            <!-- Section Header -->
+            <div class="mx-auto mb-14 max-w-3xl text-center">
+                <h2 class="text-4xl font-extrabold tracking-[-0.03em] text-white sm:text-5xl lg:text-[54px]">
+                    Trusted by Engineers
+                </h2>
+
+                <p class="mt-5 text-lg leading-8 text-white/55 sm:text-xl">
+                    See what control systems experts are saying about LabCD.
+                </p>
+            </div>
+
+            <!-- Testimonials Grid -->
+            <div class="grid gap-6 md:grid-cols-3">
+
+                <!-- Testimonial Card 1 -->
+                <article
+                    class="group relative overflow-hidden rounded-2xl border border-cyan-400/10 bg-white/[0.035] p-7 shadow-[0_20px_70px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.05)] transition duration-300 hover:-translate-y-1 hover:border-cyan-300/20 hover:bg-white/[0.045]">
+
+                    <!-- Card Glow -->
+                    <div
+                        class="pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.10),transparent_42%)]">
+                    </div>
+
+                    <div class="relative z-10">
+                        <!-- Stars -->
+                        <div class="mb-6 flex items-center gap-1 text-cyan-300">
+                            <span>★</span>
+                            <span>★</span>
+                            <span>★</span>
+                            <span>★</span>
+                            <span>★</span>
+                        </div>
+
+                        <!-- Quote -->
+                        <blockquote class="text-base font-medium italic leading-7 text-white/78">
+                            "LabCD reduced our development cycle from 12 weeks to 3 weeks.
+                            The AI-powered synthesis and automatic testing saved us countless
+                            hours of manual tuning."
+                        </blockquote>
+
+                        <!-- Author -->
+                        <div class="mt-10">
+                            <h3 class="text-base font-bold text-white">
+                                Dr. Sarah Chen
+                            </h3>
+                            <p class="mt-1 text-sm leading-6 text-white/50">
+                                Control Systems Lead at Robotics Innovations Inc.
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Testimonial Card 2 -->
+                <article
+                    class="group relative overflow-hidden rounded-2xl border border-cyan-400/10 bg-white/[0.035] p-7 shadow-[0_20px_70px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.05)] transition duration-300 hover:-translate-y-1 hover:border-cyan-300/20 hover:bg-white/[0.045]">
+
+                    <!-- Card Glow -->
+                    <div
+                        class="pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.10),transparent_42%)]">
+                    </div>
+
+                    <div class="relative z-10">
+                        <!-- Stars -->
+                        <div class="mb-6 flex items-center gap-1 text-cyan-300">
+                            <span>★</span>
+                            <span>★</span>
+                            <span>★</span>
+                            <span>★</span>
+                            <span>★</span>
+                        </div>
+
+                        <!-- Quote -->
+                        <blockquote class="text-base font-medium italic leading-7 text-white/78">
+                            "For our safety-critical robotics application, the traceability and
+                            safety-ready documentation was invaluable. We deployed with
+                            confidence."
+                        </blockquote>
+
+                        <!-- Author -->
+                        <div class="mt-10">
+                            <h3 class="text-base font-bold text-white">
+                                James Moretti
+                            </h3>
+                            <p class="mt-1 text-sm leading-6 text-white/50">
+                                Senior Engineer at Autonomous Systems Corp.
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Testimonial Card 3 -->
+                <article
+                    class="group relative overflow-hidden rounded-2xl border border-cyan-400/10 bg-white/[0.035] p-7 shadow-[0_20px_70px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.05)] transition duration-300 hover:-translate-y-1 hover:border-cyan-300/20 hover:bg-white/[0.045]">
+
+                    <!-- Card Glow -->
+                    <div
+                        class="pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.10),transparent_42%)]">
+                    </div>
+
+                    <div class="relative z-10">
+                        <!-- Stars -->
+                        <div class="mb-6 flex items-center gap-1 text-cyan-300">
+                            <span>★</span>
+                            <span>★</span>
+                            <span>★</span>
+                            <span>★</span>
+                            <span>★</span>
+                        </div>
+
+                        <!-- Quote -->
+                        <blockquote class="text-base font-medium italic leading-7 text-white/78">
+                            "The natural language interface made it accessible to engineers
+                            without deep control theory backgrounds. Yet it remained rigorous
+                            for advanced users."
+                        </blockquote>
+
+                        <!-- Author -->
+                        <div class="mt-10">
+                            <h3 class="text-base font-bold text-white">
+                                Dr. Yuki Tanaka
+                            </h3>
+                            <p class="mt-1 text-sm leading-6 text-white/50">
+                                Research Director at Mechatronics Lab
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section id="final-cta" class="relative overflow-hidden bg-[#050b18] px-6 py-24 sm:px-8 lg:px-10">
+
+        <!-- Background Effects -->
+        <div
+            class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(34,211,238,0.10),transparent_36%),radial-gradient(circle_at_top_right,rgba(37,99,235,0.12),transparent_34%)]">
+        </div>
+        <div
+            class="pointer-events-none absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] [background-size:42px_42px]">
+        </div>
+
+        <div class="relative z-10 mx-auto max-w-[1120px]">
+
+            <!-- CTA Card -->
+            <div class="relative overflow-hidden rounded-none   px-6 py-20 text-center sm:px-10 lg:px-16">
+
+                <!-- Card Background Glow -->
+                <div class="pointer-events-none absolute inset-0 "></div>
+
+                <!-- Subtle Noise/Grid -->
+                <div
+                    class="pointer-events-none absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] [background-size:38px_38px]">
+                </div>
+
+                <div class="relative z-10 mx-auto max-w-4xl">
+
+                    <!-- Heading -->
+                    <h2
+                        class="mx-auto max-w-4xl text-4xl font-extrabold leading-[1.08] tracking-[-0.04em] text-white sm:text-5xl lg:text-[58px]">
+                        Ready to Revolutionize Your
+                        <span class="block">Control Design?</span>
+                    </h2>
+
+                    <!-- Subtitle -->
+                    <p class="mx-auto mt-7 max-w-3xl text-lg font-medium leading-8 text-white/70 sm:text-xl">
+                        Join engineers designing the next generation of robotics and control
+                        systems. Start free, no credit card required.
+                    </p>
+
+                    <!-- CTA Buttons -->
+                    <div class="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
+
+                        <!-- Primary Button -->
+                        <a href="#"
+                            class="inline-flex h-14 w-full items-center justify-center rounded-lg bg-gradient-to-r from-cyan-400 to-blue-600 px-10 text-base font-extrabold text-[#06111f] shadow-[0_0_35px_rgba(34,211,238,0.28)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(34,211,238,0.42)] sm:w-auto">
+                            Get Started Free
+                        </a>
+
+                        <!-- Secondary Button -->
+                        <a href="#demo"
+                            class="inline-flex h-14 w-full items-center justify-center rounded-lg border border-cyan-400/20 bg-transparent px-10 text-base font-extrabold text-cyan-300 transition duration-300 hover:-translate-y-0.5 hover:border-cyan-300/40 hover:bg-cyan-400/10 sm:w-auto">
+                            Schedule Demo
+                        </a>
+
+                    </div>
+
+                    <!-- Helper Text -->
+                    <p class="mt-8 text-sm font-medium text-white/38 sm:text-base">
+                        Free tier: 2 projects, full feature access. Upgrade anytime.
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="relative overflow-hidden border-t border-white/[0.06] bg-[#030817] px-6 py-16 sm:px-8 lg:px-10">
+
+        <!-- Background Effects -->
+        <div
+            class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.05),transparent_32%),radial-gradient(circle_at_top_right,rgba(37,99,235,0.05),transparent_34%)]">
+        </div>
+
+        <div class="relative z-10 mx-auto max-w-[1280px]">
+
+            <!-- Footer Main Grid -->
+            <div class="grid gap-12 border-b border-white/[0.06] pb-14 sm:grid-cols-2 lg:grid-cols-5 lg:gap-10">
+
+                <!-- Brand Column -->
+                <div class="lg:col-span-1">
+                    <a href="#" class="inline-flex items-center gap-3">
+                        <!-- Logo Icon -->
+                        <span
+                            class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 shadow-[0_0_24px_rgba(34,211,238,0.28)]">
+                            <svg class="h-5 w-5 text-[#05111f]" viewBox="0 0 24 24" fill="none" aria-hidden="true"
+                                xmlns="https://www.w3.org/2000/svg">
+                                <rect x="7" y="7" width="10" height="10" rx="2" stroke="currentColor"
+                                    stroke-width="2" />
+                                <path d="M9 2V5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <path d="M15 2V5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <path d="M9 19V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <path d="M15 19V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <path d="M2 9H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <path d="M2 15H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <path d="M19 9H22" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <path d="M19 15H22" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            </svg>
+                        </span>
+
+                        <span class="text-2xl font-extrabold tracking-[-0.03em] text-white">
+                            Lab of Control Design
+                        </span>
+                    </a>
+
+                    <p class="mt-5 max-w-[230px] text-base font-medium leading-7 text-white/55">
+                        AI-powered control design for the modern engineer.
+                    </p>
+                </div>
+
+                <!-- Product Column -->
+                <div>
+                    <h3 class="text-base font-extrabold text-white">
+                        Product
+                    </h3>
+
+                    <ul class="mt-6 space-y-4">
+                        <li>
+                            <a href="#features"
+                                class="text-base font-medium text-white/50 transition hover:text-cyan-300">
+                                Features
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base font-medium text-white/50 transition hover:text-cyan-300">
+                                Pricing
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base font-medium text-white/50 transition hover:text-cyan-300">
+                                Security
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base font-medium text-white/50 transition hover:text-cyan-300">
+                                Roadmap
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Resources Column -->
+                <div>
+                    <h3 class="text-base font-extrabold text-white">
+                        Resources
+                    </h3>
+
+                    <ul class="mt-6 space-y-4">
+                        <li>
+                            <a href="#" class="text-base font-medium text-white/50 transition hover:text-cyan-300">
+                                Documentation
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base font-medium text-white/50 transition hover:text-cyan-300">
+                                API Reference
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base font-medium text-white/50 transition hover:text-cyan-300">
+                                Tutorials
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base font-medium text-white/50 transition hover:text-cyan-300">
+                                Community
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Company Column -->
+                <div>
+                    <h3 class="text-base font-extrabold text-white">
+                        Company
+                    </h3>
+
+                    <ul class="mt-6 space-y-4">
+                        <li>
+                            <a href="#" class="text-base font-medium text-white/50 transition hover:text-cyan-300">
+                                About
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base font-medium text-white/50 transition hover:text-cyan-300">
+                                Blog
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base font-medium text-white/50 transition hover:text-cyan-300">
+                                Careers
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base font-medium text-white/50 transition hover:text-cyan-300">
+                                Contact
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Legal Column -->
+                <div>
+                    <h3 class="text-base font-extrabold text-white">
+                        Legal
+                    </h3>
+
+                    <ul class="mt-6 space-y-4">
+                        <li>
+                            <a href="#" class="text-base font-medium text-white/50 transition hover:text-cyan-300">
+                                Privacy
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base font-medium text-white/50 transition hover:text-cyan-300">
+                                Terms
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base font-medium text-white/50 transition hover:text-cyan-300">
+                                Cookies
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base font-medium text-white/50 transition hover:text-cyan-300">
+                                License
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="flex flex-col gap-6 pt-9 sm:flex-row sm:items-center sm:justify-between">
+
+                <!-- Copyright -->
+                <p class="text-base font-medium text-white/50">
+                    © 2026 Lab of Control Design. All rights reserved.
+                </p>
+
+                <!-- Social Links -->
+                <div class="flex items-center gap-6">
+                    <a href="#" class="text-base font-medium text-white/50 transition hover:text-cyan-300">
+                        Twitter
+                    </a>
+                    <a href="#" class="text-base font-medium text-white/50 transition hover:text-cyan-300">
+                        LinkedIn
+                    </a>
+                    <a href="#" class="text-base font-medium text-white/50 transition hover:text-cyan-300">
+                        GitHub
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </footer>
+
 
 <script>
-const glow=document.getElementById('cursor-glow');
-window.addEventListener('mousemove',e=>{
-glow.animate({left:e.clientX+'px',top:e.clientY+'px'},{duration:350,fill:'forwards'});
-});
+    const mouseGlow = document.getElementById('mouse-glow');
+    const mouseDot = document.getElementById('mouse-dot');
 
-document.querySelectorAll('.feature-card,.dashboard-preview').forEach(card=>{
-card.addEventListener('mousemove',e=>{
-const r=card.getBoundingClientRect();
-const x=e.clientX-r.left;
-const y=e.clientY-r.top;
-const ry=(x/r.width-.5)*16;
-const rx=-(y/r.height-.5)*16;
-card.style.transform=`perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-5px)`;
-});
-card.addEventListener('mouseleave',()=>{
-card.style.transform='perspective(1000px) rotateX(0) rotateY(0)';
-});
-});
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
 
-document.querySelectorAll('.magnetic').forEach(btn=>{
-btn.addEventListener('mousemove',e=>{
-const r=btn.getBoundingClientRect();
-const x=e.clientX-r.left-r.width/2;
-const y=e.clientY-r.top-r.height/2;
-btn.style.transform=`translate(${x*0.15}px,${y*0.15}px)`;
-});
-btn.addEventListener('mouseleave',()=>btn.style.transform='translate(0,0)');
-});
+    let glowX = mouseX;
+    let glowY = mouseY;
 
-const obs=new IntersectionObserver(entries=>{
-entries.forEach(entry=>{
-if(entry.isIntersecting) entry.target.classList.add('active');
-});
-},{threshold:.15});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+    let dotX = mouseX;
+    let dotY = mouseY;
 
-const canvas=document.getElementById('particles');
-const ctx=canvas.getContext('2d');
-function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
-resize(); addEventListener('resize',resize);
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-const particles=[];
-for(let i=0;i<90;i++){
-particles.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-r:Math.random()*2+1,
-vx:(Math.random()-.5)*0.4,
-vy:(Math.random()-.5)*0.4
-});
-}
-function animate(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-particles.forEach(p=>{
-p.x+=p.vx;p.y+=p.vy;
-if(p.x<0||p.x>canvas.width)p.vx*=-1;
-if(p.y<0||p.y>canvas.height)p.vy*=-1;
-ctx.beginPath();
-ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-ctx.fillStyle='rgba(255,255,255,.25)';
-ctx.fill();
-});
-requestAnimationFrame(animate);
-}
-animate();
+    if (!prefersReducedMotion && mouseGlow && mouseDot) {
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursorEffect() {
+            glowX += (mouseX - glowX) * 0.08;
+            glowY += (mouseY - glowY) * 0.08;
+
+            dotX += (mouseX - dotX) * 0.28;
+            dotY += (mouseY - dotY) * 0.28;
+
+            mouseGlow.style.transform = `translate(${glowX}px, ${glowY}px) translate(-50%, -50%)`;
+            mouseDot.style.transform = `translate(${dotX}px, ${dotY}px) translate(-50%, -50%)`;
+
+            requestAnimationFrame(animateCursorEffect);
+        }
+
+        animateCursorEffect();
+    }
 </script>
+
 </body>
+
 </html>
