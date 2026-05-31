@@ -36,13 +36,13 @@
 <body class="bg-white font-inter text-white">
 
     <!-- Subtle Mouse Glow Effect -->
-<div id="mouse-glow"
-    class="pointer-events-none fixed left-0 top-0 z-[60] hidden h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/10 blur-3xl mix-blend-screen md:block">
-</div>
+    <div id="mouse-glow"
+        class="pointer-events-none fixed left-0 top-0 z-[60] hidden h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/10 blur-3xl mix-blend-screen md:block">
+    </div>
 
-<div id="mouse-dot"
-    class="pointer-events-none fixed left-0 top-0 z-[61] hidden h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-300/70 shadow-[0_0_18px_rgba(34,211,238,0.55)] md:block">
-</div>
+    <div id="mouse-dot"
+        class="pointer-events-none fixed left-0 top-0 z-[61] hidden h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-300/70 shadow-[0_0_18px_rgba(34,211,238,0.55)] md:block">
+    </div>
 
     <!-- Navbar -->
     <header class="sticky top-0 z-50 relative w-full overflow-hidden border-b border-white/[0.07] bg-darkNav">
@@ -111,7 +111,8 @@
             <!-- Desktop Actions -->
             <div class="flex shrink-0 items-center gap-5 max-md:hidden">
 
-                <a href="https://chat.labcd.ai" class="text-[15px] font-medium text-white/65 transition hover:text-white">
+                <a href="https://chat.labcd.ai"
+                    class="text-[15px] font-medium text-white/65 transition hover:text-white">
                     Sign In
                 </a>
 
@@ -1904,43 +1905,43 @@
     </footer>
 
 
-<script>
-    const mouseGlow = document.getElementById('mouse-glow');
-    const mouseDot = document.getElementById('mouse-dot');
+    <script>
+        const mouseGlow = document.getElementById('mouse-glow');
+        const mouseDot = document.getElementById('mouse-dot');
 
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
 
-    let glowX = mouseX;
-    let glowY = mouseY;
+        let glowX = mouseX;
+        let glowY = mouseY;
 
-    let dotX = mouseX;
-    let dotY = mouseY;
+        let dotX = mouseX;
+        let dotY = mouseY;
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (!prefersReducedMotion && mouseGlow && mouseDot) {
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
+        if (!prefersReducedMotion && mouseGlow && mouseDot) {
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
 
-        function animateCursorEffect() {
-            glowX += (mouseX - glowX) * 0.08;
-            glowY += (mouseY - glowY) * 0.08;
+            function animateCursorEffect() {
+                glowX += (mouseX - glowX) * 0.08;
+                glowY += (mouseY - glowY) * 0.08;
 
-            dotX += (mouseX - dotX) * 0.28;
-            dotY += (mouseY - dotY) * 0.28;
+                dotX += (mouseX - dotX) * 0.28;
+                dotY += (mouseY - dotY) * 0.28;
 
-            mouseGlow.style.transform = `translate(${glowX}px, ${glowY}px) translate(-50%, -50%)`;
-            mouseDot.style.transform = `translate(${dotX}px, ${dotY}px) translate(-50%, -50%)`;
+                mouseGlow.style.transform = `translate(${glowX}px, ${glowY}px) translate(-50%, -50%)`;
+                mouseDot.style.transform = `translate(${dotX}px, ${dotY}px) translate(-50%, -50%)`;
 
-            requestAnimationFrame(animateCursorEffect);
+                requestAnimationFrame(animateCursorEffect);
+            }
+
+            animateCursorEffect();
         }
-
-        animateCursorEffect();
-    }
-</script>
+    </script>
 
 </body>
 
